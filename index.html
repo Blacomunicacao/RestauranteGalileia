@@ -165,13 +165,15 @@
             max-height: 90%;
             position: relative;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
         }
 
         .popup-image {
             max-width: 100%;
-            max-height: 80vh;
+            max-height: 70vh;
             border-radius: 10px;
             display: block;
+            margin-bottom: 15px;
         }
 
         .close-btn {
@@ -210,6 +212,45 @@
             margin: 10px 0;
         }
 
+        /* Botão Eu Quero no Popup */
+        .popup-btn {
+            display: none;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        .popup-btn:hover {
+            background: #c0392b;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.6);
+        }
+
+        .popup-btn.show {
+            display: inline-block;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 10px;
@@ -232,6 +273,11 @@
                 top: 5px;
                 right: 10px;
                 font-size: 1.5rem;
+            }
+
+            .popup-btn {
+                padding: 12px 25px;
+                font-size: 1.1rem;
             }
         }
     </style>
@@ -304,16 +350,33 @@
                     </div>
                 </div>
             </div>
+            <!-- Botão Eu Quero -->
+            <a href="https://pedido.anota.ai/loja/galileia-restaurante-e-lanchonete?f=ms" class="popup-btn" id="popup-action-btn">
+                EU QUERO!
+            </a>
         </div>
     </div>
 
     <script>
+        let popupTimer;
+
         function openPopup() {
             document.getElementById('popup').style.display = 'flex';
+            // Esconder o botão inicialmente
+            document.getElementById('popup-action-btn').classList.remove('show');
+            
+            // Mostrar o botão após 2 segundos
+            popupTimer = setTimeout(() => {
+                document.getElementById('popup-action-btn').classList.add('show');
+            }, 2000);
         }
 
         function closePopup() {
             document.getElementById('popup').style.display = 'none';
+            // Limpar o timer quando fechar o popup
+            clearTimeout(popupTimer);
+            // Esconder o botão novamente
+            document.getElementById('popup-action-btn').classList.remove('show');
         }
 
         function showFallbackPromo() {
