@@ -183,6 +183,19 @@
             transform: scale(1.1);
         }
 
+        .image-placeholder {
+            width: 100%;
+            height: 200px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 10px;
@@ -215,7 +228,11 @@
             <div class="logo">Restaurante Galileia</div>
             <div class="subtitle">Sabor e qualidade em cada prato</div>
             <div class="avatar">
-                <img src="logo-Pizzaria Galiléia.png" alt="Logo Pizzaria Galileia">
+                <!-- Imagem local - verifique o nome do arquivo -->
+                <img src="logo-Pizzaria Galiléia.png" alt="Logo Pizzaria Galileia" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="image-placeholder" style="display: none;">
+                    <i class="fas fa-utensils" style="font-size: 3rem; color: #f8c471;"></i>
+                </div>
             </div>
             <div class="welcome">Bem-vindo(a)</div>
         </div>
@@ -258,7 +275,17 @@
     <div class="popup-overlay" id="popup">
         <div class="popup-content">
             <button class="close-btn" onclick="closePopup()">&times;</button>
-            <img src="Promo Halloween-03.png" alt="Promoção da Semana" class="popup-image">
+            <!-- Imagem da promoção com fallback -->
+            <img src="promo-halloween-03.png" alt="Promoção da Semana" class="popup-image" onerror="this.style.display='none'; showFallbackPromo()">
+            <div id="fallback-promo" style="display: none;">
+                <div class="image-placeholder" style="height: 300px;">
+                    <div style="text-align: center;">
+                        <i class="fas fa-gift" style="font-size: 4rem; color: #f8c471; margin-bottom: 20px;"></i>
+                        <h3 style="color: #333; margin-bottom: 10px;">PROMOÇÃO ESPECIAL</h3>
+                        <p style="color: #666;">Confira nossas promoções no WhatsApp!</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -269,6 +296,10 @@
 
         function closePopup() {
             document.getElementById('popup').style.display = 'none';
+        }
+
+        function showFallbackPromo() {
+            document.getElementById('fallback-promo').style.display = 'block';
         }
 
         // Fechar popup clicando fora da imagem
@@ -282,6 +313,30 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closePopup();
+            }
+        });
+
+        // Verificar se as imagens existem
+        window.addEventListener('load', function() {
+            // Verificar imagem do avatar
+            const avatarImg = document.querySelector('.avatar img');
+            if (avatarImg) {
+                avatarImg.onerror = function() {
+                    this.style.display = 'none';
+                    const placeholder = this.nextElementSibling;
+                    if (placeholder) {
+                        placeholder.style.display = 'flex';
+                    }
+                };
+            }
+
+            // Verificar imagem da promoção
+            const promoImg = document.querySelector('.popup-image');
+            if (promoImg) {
+                promoImg.onerror = function() {
+                    this.style.display = 'none';
+                    showFallbackPromo();
+                };
             }
         });
     </script>
